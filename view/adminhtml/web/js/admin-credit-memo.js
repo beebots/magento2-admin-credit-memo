@@ -55,7 +55,7 @@ define([
             let element = $('input[name="'+selector+'"]');
 
             if (element.length === 0) {
-                return;x
+                return;
             }
 
             element.attr('disabled', disabled);
