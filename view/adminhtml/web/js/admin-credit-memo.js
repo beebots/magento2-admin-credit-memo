@@ -51,24 +51,6 @@ define([
             element.val(value);
             this.triggerChangeListener();
         },
-        disableInputByName: function (selector, disabled = true) {
-            let element = $('input[name="'+selector+'"]');
-
-            if (element.length === 0) {
-                return;
-            }
-
-            element.attr('disabled', disabled);
-        },
-        disableQtyInputs: function(disabled = true) {
-            let self = this;
-            this.container.find('input.qty-input').each(function(){
-
-                let value = self.getItemInfoByName($(this).attr('name'));
-                $(this).attr('disabled', value <= 0);
-
-            });
-        },
         getItemInfo: function() {
 
             let itemInfo = {};
@@ -126,12 +108,10 @@ define([
 
             if ($(event.target).is(':checked')) {
                 this.setRefundAllQtys();
-                this.disableQtyInputs(false);
                 this.checkAllItems();
                 return;
             }
             this.setZeroRefundQtys();
-            this.disableQtyInputs();
             this.checkAllItems(false);
 
         },
@@ -141,14 +121,14 @@ define([
             let name = checkbox.attr('data-name');
             let qtyValue = this.getItemInfoByName(name);
 
+            console.log(this.countRefundableItems());
+
             if (checkbox.is(':checked')) {
                 this.updateInputValueByName(name, qtyValue);
-                this.disableInputByName(name, false);
                 this.uncheckRefundAll();
                 return;
             }
             this.updateInputValueByName(name, 0);
-            this.disableInputByName(name);
             this.uncheckRefundAll();
         },
         getItemInfoByName: function(keyName) {
@@ -200,6 +180,18 @@ define([
         checkItem: function(checkboxSelector, checked = true) {
             let checkbox = $(checkboxSelector);
             checkbox.attr('checked', checked);
+        },
+        countRefundableItems: function() {
+            let items = this.getItemInfo();
+
+            let count = 0;
+            for (let item in items) {
+                if (items[item] > 0) {
+                    count++;
+                }
+            }
+
+            return count;
         }
     };
 
