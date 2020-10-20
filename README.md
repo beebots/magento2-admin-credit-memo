@@ -7,4 +7,4 @@ composer require beebots/magento2-admin-credit-memo
 ```
 
 ## License
-[MIT](LICENSE.md)
+[MIT](LICENSE.txt)
